@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "api-collection-hono-todo",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
