@@ -30,9 +30,20 @@ todoApp
   .get("/todos/:id", (c) => {
     const id = Number(c.req.param("id"));
     return c.json(todos.filter((todo) => todo.id === id));
+  })
+  .post("/todos/:text", (c) => {
+    const { text } = c.req.param();
+    
+    const id = Math.max(...todos.map((todo) => todo.id), 0) + 1;
+    const newTodo = {
+      id: id,
+      text: text,
+      completed:false
+    }
+    todos.push(newTodo)
+    
+    return c.json(newTodo, 201)
   });
-
-//  TODO: create todo
 
 //  TODO: delete todo
 //  TODO: update todo
