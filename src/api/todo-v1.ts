@@ -74,5 +74,4 @@ todoApp.put("/:id", (c) => {
   return c.json(todos[idx]);
 });
 
-//  TODO: update todo
 export default todoApp;
