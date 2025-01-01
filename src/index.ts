@@ -8,7 +8,7 @@ const app = new Hono();
 app.use(logger());
 
 // Global error middleware
-app.use("*", async (c, next) => {
+app.use("*", logger(), async (c, next) => {
   try {
     await next();
   } catch (error) {

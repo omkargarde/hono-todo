@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 
-const todoApp = new Hono();
+const todoApp = new Hono().basePath("/todos");
 
 todoApp.use(logger());
 
@@ -23,33 +23,39 @@ const todos = [
   },
 ];
 
-todoApp
-  .get("/todos", (c) => {
-    return c.json(todos);
-  })
-  .get("/todos/:id", (c) => {
-    const id = Number(c.req.param("id"));
-    return c.json(todos.filter((todo) => todo.id === id));
-  })
-  .post("/todos/:text", (c) => {
-    const { text } = c.req.param();
-    
-    const id = Math.max(...todos.map((todo) => todo.id), 0) + 1;
-    const newTodo = {
-      id: id,
-      text: text,
-      completed:false
-    }
-    todos.push(newTodo)
-    
-    return c.json(newTodo, 201)
-  });
-
-//  TODO: delete todo
-//  TODO: update todo
-
 todoApp.get("/", (c) => {
-  return c.text("test");
+  return c.json(todos);
 });
 
+todoApp.get("/:id", (c) => {
+  const id = Number(c.req.param("id"));
+  return c.json(todos.filter((todo) => todo.id === id));
+});
+
+todoApp.post("/:text", (c) => {
+  const { text } = c.req.param();
+
+  const id = Math.max(...todos.map((todo) => todo.id), 0) + 1;
+  const newTodo = {
+    id: id,
+    text: text,
+    completed: false,
+  };
+  todos.push(newTodo);
+
+  return c.json(newTodo, 201);
+});
+
+todoApp.delete("/:id", (c) => {
+  const id = Number(c.req.param("id"));
+  const idx = todos.findIndex((todo) => todo.id === id);
+
+  if (idx === -1) return c.json({ error: "Todo not found" }, 404);
+  todos.splice(idx, 1);
+  return c.json(null);
+});
+
+// todoApp.put("/todos");
+
+//  TODO: update todo
 export default todoApp;
