@@ -73,4 +73,5 @@ todoApp.delete("/:id", (c) => {
   todos.splice(idx, 1);
   return c.json(null);
 });
+
 export default todoApp;
