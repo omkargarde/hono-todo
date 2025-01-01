@@ -55,7 +55,24 @@ todoApp.delete("/:id", (c) => {
   return c.json(null);
 });
 
-// todoApp.put("/todos");
+todoApp.put("/:id", (c) => {
+  const id = Number(c.req.param("id"));
+  const text = c.req.query("text");
+  const completed = c.req.query("completed");
+
+  const idx = todos.findIndex((todo) => todo.id === id);
+  if (idx === -1) return c.json({ error: "Todo not found" }, 404);
+
+  const todo = todos[idx];
+  if (text !== undefined) {
+    todo.text = text;
+  }
+  if (completed !== undefined) {
+    todo.completed = !todo.completed;
+  }
+
+  return c.json(todos[idx]);
+});
 
 //  TODO: update todo
 export default todoApp;

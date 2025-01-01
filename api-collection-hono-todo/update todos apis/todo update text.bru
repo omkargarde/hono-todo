@@ -1,0 +1,15 @@
+meta {
+  name: todo update text
+  type: http
+  seq: 1
+}
+
+put {
+  url: http://localhost:8787/api/v1/todos/3?completed=true
+  body: none
+  auth: none
+}
+
+params:query {
+  completed: true
+}

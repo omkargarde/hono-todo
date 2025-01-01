@@ -1,0 +1,15 @@
+meta {
+  name: todo toggle todo
+  type: http
+  seq: 2
+}
+
+put {
+  url: http://localhost:8787/api/v1/todos/3?completed=true
+  body: none
+  auth: none
+}
+
+params:query {
+  completed: true
+}
