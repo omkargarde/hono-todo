@@ -46,15 +46,6 @@ todoApp.post("/:text", (c) => {
   return c.json(newTodo, 201);
 });
 
-todoApp.delete("/:id", (c) => {
-  const id = Number(c.req.param("id"));
-  const idx = todos.findIndex((todo) => todo.id === id);
-
-  if (idx === -1) return c.json({ error: "Todo not found" }, 404);
-  todos.splice(idx, 1);
-  return c.json(null);
-});
-
 todoApp.put("/:id", (c) => {
   const id = Number(c.req.param("id"));
   const text = c.req.query("text");
@@ -74,4 +65,12 @@ todoApp.put("/:id", (c) => {
   return c.json(todos[idx]);
 });
 
+todoApp.delete("/:id", (c) => {
+  const id = Number(c.req.param("id"));
+  const idx = todos.findIndex((todo) => todo.id === id);
+
+  if (idx === -1) return c.json({ error: "Todo not found" }, 404);
+  todos.splice(idx, 1);
+  return c.json(null);
+});
 export default todoApp;
