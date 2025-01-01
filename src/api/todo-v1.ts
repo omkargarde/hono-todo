@@ -5,7 +5,13 @@ const todoApp = new Hono().basePath("/todos");
 
 todoApp.use(logger());
 
-const todos = [
+interface Todo {
+  id: number;
+  text: string;
+  completed: boolean;
+}
+
+const todos: Todo[] = [
   {
     id: 1,
     text: "something to do",
