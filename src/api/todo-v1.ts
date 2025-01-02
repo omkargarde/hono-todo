@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { createTodo } from "../controllers/create-todo";
+import { deleteTodo } from "../controllers/delete-todo";
 import { getTodos } from "../controllers/get-all-todos";
 import { getTodosById } from "../controllers/get-todos-by-id";
 
@@ -56,13 +57,6 @@ todoApp.put("/:id", (c) => {
   return c.json(todosArr[idx]);
 });
 
-todoApp.delete("/:id", (c) => {
-  const id = Number(c.req.param("id"));
-  const idx = todosArr.findIndex((todo) => todo.id === id);
-
-  if (idx === -1) return c.json({ error: "Todo not found" }, 404);
-  todosArr.splice(idx, 1);
-  return c.json(null);
-});
+todoApp.delete("/:id", deleteTodo);
 
 export default todoApp;
