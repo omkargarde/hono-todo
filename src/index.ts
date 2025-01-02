@@ -3,7 +3,11 @@ import { HTTPException } from "hono/http-exception";
 import { logger } from "hono/logger";
 import todoApp from "./api/todo-v1";
 
-const app = new Hono();
+interface Env {
+  DB: D1Database;
+}
+
+const app = new Hono<{ Bindings: Env }>();
 
 app.use(logger());
 

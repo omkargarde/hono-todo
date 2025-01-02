@@ -1,9 +1,7 @@
 import { Hono } from "hono";
-import { logger } from "hono/logger";
+import { createTodo } from "../controllers/create-todo";
 
 const todoApp = new Hono().basePath("/todos");
-
-todoApp.use(logger());
 
 interface Todo {
   id: number;
@@ -11,7 +9,9 @@ interface Todo {
   completed: boolean;
 }
 
-const todos: Todo[] = [
+// https:everythingcs.dev/blog/cloudflare-d1-workers-rest-api-crud-operation/
+
+const todosArr: Todo[] = [
   {
     id: 1,
     text: "something to do",
@@ -30,37 +30,25 @@ const todos: Todo[] = [
 ];
 
 todoApp.get("/", (c) => {
-  return c.json(todos);
+  return c.json(todosArr);
 });
 
 todoApp.get("/:id", (c) => {
   const id = Number(c.req.param("id"));
-  return c.json(todos.filter((todo) => todo.id === id));
+  return c.json(todosArr.filter((todo) => todo.id === id));
 });
 
-todoApp.post("/:text", (c) => {
-  const { text } = c.req.param();
-
-  const id = Math.max(...todos.map((todo) => todo.id), 0) + 1;
-  const newTodo = {
-    id: id,
-    text: text,
-    completed: false,
-  };
-  todos.push(newTodo);
-
-  return c.json(newTodo, 201);
-});
+todoApp.post("/:text", createTodo);
 
 todoApp.put("/:id", (c) => {
   const id = Number(c.req.param("id"));
   const text = c.req.query("text");
   const completed = c.req.query("completed");
 
-  const idx = todos.findIndex((todo) => todo.id === id);
+  const idx = todosArr.findIndex((todo) => todo.id === id);
   if (idx === -1) return c.json({ error: "Todo not found" }, 404);
 
-  const todo = todos[idx];
+  const todo = todosArr[idx];
   if (text !== undefined) {
     todo.text = text;
   }
@@ -68,15 +56,15 @@ todoApp.put("/:id", (c) => {
     todo.completed = !todo.completed;
   }
 
-  return c.json(todos[idx]);
+  return c.json(todosArr[idx]);
 });
 
 todoApp.delete("/:id", (c) => {
   const id = Number(c.req.param("id"));
-  const idx = todos.findIndex((todo) => todo.id === id);
+  const idx = todosArr.findIndex((todo) => todo.id === id);
 
   if (idx === -1) return c.json({ error: "Todo not found" }, 404);
-  todos.splice(idx, 1);
+  todosArr.splice(idx, 1);
   return c.json(null);
 });
 
