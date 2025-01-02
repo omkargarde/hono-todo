@@ -1,5 +1,7 @@
 import { Hono } from "hono";
 import { createTodo } from "../controllers/create-todo";
+import { getTodos } from "../controllers/get-all-todos";
+import { getTodosById } from "../controllers/get-todos-by-id";
 
 const todoApp = new Hono().basePath("/todos");
 
@@ -29,14 +31,9 @@ const todosArr: Todo[] = [
   },
 ];
 
-todoApp.get("/", (c) => {
-  return c.json(todosArr);
-});
+todoApp.get("/", getTodos);
 
-todoApp.get("/:id", (c) => {
-  const id = Number(c.req.param("id"));
-  return c.json(todosArr.filter((todo) => todo.id === id));
-});
+todoApp.get("/:id", getTodosById);
 
 todoApp.post("/:text", createTodo);
 
