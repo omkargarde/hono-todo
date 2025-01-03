@@ -9,11 +9,10 @@ export const toggleTodo = async (c: Context) => {
       .bind(id)
       .run();
     if (!success) {
-      return c.json({ error: "Update failed" }, 500);
+      return c.json("Toggle todo failed", 500);
     }
-    return c.json("Updated todo successfully", 201);
+    return c.json("Toggled todo successfully", 201);
   } catch (error) {
-    console.error(error); // Add this for debugging
-    return c.json({ error: "Update failed" }, 500);
+    return c.json("Toggle todo failed", 500);
   }
 };
